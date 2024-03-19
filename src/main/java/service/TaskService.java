@@ -23,6 +23,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import jakarta.ws.rs.*;
+
+import javax.print.attribute.standard.Media;
+
 @Path("/task")
 public class TaskService {
     @Inject
@@ -46,6 +49,21 @@ public class TaskService {
             return Response.status(200).entity(taskList).build();
         }
     }
+
+    @GET
+    @Path("/allActive")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllActiveTasks(@HeaderParam("token") String token) {
+        boolean authorized = userBean.isUserAuthorized(token);
+        if (!authorized) {
+            return Response.status(401).entity("Unauthorized").build();
+        } else {
+            ArrayList<Task> taskList = taskBean.getAllActiveTasks();
+            taskList.sort(Comparator.comparing(Task::getPriority, Comparator.reverseOrder()).thenComparing(Comparator.comparing(Task::getStartDate).thenComparing(Task::getEndDate)));
+            return Response.status(200).entity(taskList).build();
+        }
+    }
+
     @GET
     @Path("/byUser/{username}")
     @Produces(MediaType.APPLICATION_JSON)

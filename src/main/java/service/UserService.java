@@ -39,6 +39,32 @@ public class UserService {
             return Response.status(200).entity(users).build();
         }
     }
+    @GET
+    @Path("/allActive")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getActiveUsers(@HeaderParam("token") String token) {
+        boolean user = userBean.tokenExists(token);
+        if (!user) {
+            return Response.status(403).entity("User with this token is not found").build();
+        }else {
+            ArrayList<User> users = userBean.getActiveUsers(token);
+            return Response.status(200).entity(users).build();
+        }
+    }
+
+    @GET
+    @Path("/allInactive")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getInactiveUsers(@HeaderParam("token") String token) {
+        boolean user = userBean.tokenExists(token);
+        if (!user) {
+            return Response.status(403).entity("User with this token is not found").build();
+        }else {
+            ArrayList<User> users = userBean.getInactiveUsers(token);
+            return Response.status(200).entity(users).build();
+        }
+    }
+
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -198,6 +224,7 @@ public class UserService {
             return Response.status(403).entity("Forbidden").build();
         }else {
             User user = userBean.getUser(token);
+            System.out.println(user.getUsername());
             UserDto userDto = userBean.convertUsertoUserDto(user);
             return Response.status(200).entity(userDto).build();
         }

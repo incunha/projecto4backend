@@ -191,6 +191,31 @@ public boolean findOtherUserByUsername(String username) {
         UserEntity userEntity = userDao.findUserByUsername(username);
         return convertToDto(userEntity);
     }
+    public ArrayList<User> getActiveUsers(String token) {
+        UserEntity user = userDao.findUserByToken(token);
+        List<UserEntity> userEntities = userDao.findAllActiveUsers();
+        ArrayList<User> users = new ArrayList<>();
+
+        for (UserEntity userEntity : userEntities) {
+            if(!userEntity.getUsername().equals("admin") || !userEntity.getUsername().equals("deleted") || !userEntity.getUsername().equals(user.getUsername())){
+                users.add(convertToDto(userEntity));
+            }
+        }
+        return users;
+    }
+
+    public ArrayList<User> getInactiveUsers(String token) {
+        UserEntity user = userDao.findUserByToken(token);
+        List<UserEntity> userEntities = userDao.findAllInactiveUsers();
+        ArrayList<User> users = new ArrayList<>();
+
+        for (UserEntity userEntity : userEntities) {
+            if(!userEntity.getUsername().equals("admin") || !userEntity.getUsername().equals("deleted") || !userEntity.getUsername().equals(user.getUsername())){
+                users.add(convertToDto(userEntity));
+            }
+        }
+        return users;
+    }
 
     public UserEntity convertToEntity(User user) {
         UserEntity userEntity = new UserEntity();

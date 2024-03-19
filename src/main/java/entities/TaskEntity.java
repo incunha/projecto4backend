@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name="Tasks")
+@NamedQuery(name="Task.findAllActiveTasks", query="SELECT a FROM TaskEntity a WHERE a.active = true")
+@NamedQuery(name="Task.findAllInactiveTasks", query="SELECT a FROM TaskEntity a WHERE a.active = false")
 @NamedQuery(name="Task.findTaskById", query="SELECT a FROM TaskEntity a WHERE a.id = :id")
 @NamedQuery(name="Task.findTaskByUser", query="SELECT a FROM TaskEntity a WHERE a.user = :user")
 @NamedQuery(name="Task.findTaskByCategory", query="SELECT a FROM TaskEntity a WHERE a.category = :category")

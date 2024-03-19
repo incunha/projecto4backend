@@ -22,7 +22,8 @@ import jakarta.ejb.Stateless;
 
 @Singleton
 
-public class TaskBean {
+public class
+TaskBean {
     public TaskBean() {
     }
     @EJB
@@ -213,21 +214,17 @@ public class TaskBean {
         }
         return false;
     }
-    public List<TaskEntity> getTasksByCategory(String category) {
-        return taskDao.findTasksByCategory(category);
-    }
-    public boolean unblockTask(String id) {
-        TaskEntity a = taskDao.findTaskById(id);
-        if (a != null) {
-            a.setActive(true);
-            taskDao.updateTask(a);
-            return true;
+
+    public ArrayList<Task> getAllActiveTasks (){
+        ArrayList<Task> activeTasks= new ArrayList<>();
+        List<TaskEntity> activeEntities = taskDao.findAllActiveTasks();
+        for(TaskEntity entity : activeEntities){
+            activeTasks.add(convertToDto(entity));
         }
-        return false;
+        return activeTasks;
     }
-    public List <TaskEntity> getBlockedTasks() {
-        return taskDao.findBlockedTasks();
-    }
+
+
     public boolean updateTask(TaskEntity task) {
         TaskEntity a = taskDao.findTaskById(task.getId());
         if (a != null) {

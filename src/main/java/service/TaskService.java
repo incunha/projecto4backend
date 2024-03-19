@@ -65,6 +65,20 @@ public class TaskService {
     }
 
     @GET
+    @Path("/allInactive")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllInactiveTasks(@HeaderParam("token") String token) {
+        boolean authorized = userBean.isUserAuthorized(token);
+        if (!authorized) {
+            return Response.status(401).entity("Unauthorized").build();
+        } else {
+            ArrayList<Task> taskList = taskBean.getAllInactiveTasks();
+            taskList.sort(Comparator.comparing(Task::getPriority, Comparator.reverseOrder()).thenComparing(Comparator.comparing(Task::getStartDate).thenComparing(Task::getEndDate)));
+            return Response.status(200).entity(taskList).build();
+        }
+    }
+
+    @GET
     @Path("/byUser/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTasksByUser(@HeaderParam("token") String token,@PathParam("username") String username) {

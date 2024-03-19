@@ -224,6 +224,15 @@ TaskBean {
         return activeTasks;
     }
 
+    public ArrayList<Task> getAllInactiveTasks (){
+        ArrayList<Task> inactiveTasks= new ArrayList<>();
+        List<TaskEntity> inactiveEntities = taskDao.findAllInactiveTasks();
+        for(TaskEntity entity : inactiveEntities){
+            inactiveTasks.add(convertToDto(entity));
+        }
+        return inactiveTasks;
+    }
+
 
     public boolean updateTask(TaskEntity task) {
         TaskEntity a = taskDao.findTaskById(task.getId());

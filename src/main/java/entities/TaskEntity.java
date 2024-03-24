@@ -6,11 +6,11 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name="Tasks")
-@NamedQuery(name="Task.findAllActiveTasks", query="SELECT a FROM TaskEntity a WHERE a.active = true")
-@NamedQuery(name="Task.findAllInactiveTasks", query="SELECT a FROM TaskEntity a WHERE a.active = false")
+@NamedQuery(name="Task.findAllActiveTasks", query="SELECT a FROM TaskEntity a WHERE a.active = true ORDER BY a.priority DESC, a.startDate ASC, a.endDate ASC")
+@NamedQuery(name="Task.findAllInactiveTasks", query="SELECT a FROM TaskEntity a WHERE a.active = false ORDER BY a.priority DESC, a.startDate ASC, a.endDate ASC")
 @NamedQuery(name="Task.findTaskById", query="SELECT a FROM TaskEntity a WHERE a.id = :id")
-@NamedQuery(name="Task.findTaskByUser", query="SELECT a FROM TaskEntity a WHERE a.user = :user")
-@NamedQuery(name="Task.findTaskByCategory", query="SELECT a FROM TaskEntity a WHERE a.category = :category")
+@NamedQuery(name="Task.findTaskByUser", query="SELECT a FROM TaskEntity a WHERE a.user = :user order by a.priority DESC, a.startDate ASC, a.endDate ASC")
+@NamedQuery(name="Task.findTaskByCategory", query="SELECT a FROM TaskEntity a WHERE a.category = :category order by a.priority DESC, a.startDate ASC, a.endDate ASC")
 @NamedQuery(name="Task.findTaskByStatus", query="SELECT a FROM TaskEntity a WHERE a.status = :status")
 @NamedQuery(name="Task.findTaskByPriority", query="SELECT a FROM TaskEntity a WHERE a.priority = :priority")
 @NamedQuery(name="Task.findBlockedTasks", query="SELECT a FROM TaskEntity a WHERE a.active = false")

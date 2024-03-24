@@ -19,7 +19,7 @@ import org.hibernate.query.sqm.function.SelfRenderingOrderedSetAggregateFunction
 import utilities.EncryptHelper;
 
 
-@Path("/user")
+@Path("/users")
 public class UserService {
     @Context
     private HttpServletRequest request;
@@ -28,7 +28,7 @@ public class UserService {
     @Inject
     EncryptHelper encryptHelper;
     @GET
-    @Path("/all")
+    @Path("")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsers(@HeaderParam("token") String token) {
         boolean user = userBean.tokenExists(token);
@@ -40,7 +40,7 @@ public class UserService {
         }
     }
     @GET
-    @Path("/allActive")
+    @Path("/active")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getActiveUsers(@HeaderParam("token") String token) {
         boolean user = userBean.tokenExists(token);
@@ -53,7 +53,7 @@ public class UserService {
     }
 
     @GET
-    @Path("/allInactive")
+    @Path("/inactive")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInactiveUsers(@HeaderParam("token") String token) {
         boolean user = userBean.tokenExists(token);
@@ -66,7 +66,7 @@ public class UserService {
     }
 
     @POST
-    @Path("/register")
+    @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addUser(User a) {
        boolean valid = userBean.isUserValid(a);
@@ -120,7 +120,7 @@ public class UserService {
         return Response.status(200).entity(userDto).build();
     }
     @PUT
-    @Path("/update")
+    @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateUser(@HeaderParam("token") String token, User a) {
@@ -151,7 +151,7 @@ public class UserService {
             return Response.status(403).entity("Forbidden").build();
     }
     @PATCH
-    @Path("/updatePassword")
+    @Path("/password")
     @Produces(MediaType.APPLICATION_JSON)
     public Response updatePassword(@HeaderParam("token") String token, PasswordDto password) {
         boolean authorized = userBean.isUserAuthorized(token);
@@ -200,7 +200,7 @@ public class UserService {
         }
     }
     @DELETE
-    @Path("/delete/{username}")
+    @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteUser(@HeaderParam("token") String token,@PathParam("username") String username){
         boolean authorized = userBean.isUserOwner(token);
@@ -229,8 +229,8 @@ public class UserService {
             return Response.status(200).entity(userDto).build();
         }
     }
-    @POST
-    @Path("/restore/{username}")
+    @PATCH
+    @Path("/active/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response restoreUser(@HeaderParam("token") String token, @PathParam("username") String username) {
         boolean authorized = userBean.isUserOwner(token);
